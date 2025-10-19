@@ -1,6 +1,9 @@
+
+
 import { type ReactNode } from "react";
 import { Navbar } from "../components/storefront/Navbar";
 import { Footer } from "../components/storefront/Footer";
+import { SessionProvider } from "next-auth/react";
 
 export default function StoreFrontLayout({
   children,

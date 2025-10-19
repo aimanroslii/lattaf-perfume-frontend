@@ -7,6 +7,10 @@ const nextConfig = {
                 hostname: 'utfs.io',
                 port: '',
             },
+        ],
+        domains : [
+            "cdn-ilboccp.nitrocdn.com",
+            "lattafa.com",
         ]
     }
 }

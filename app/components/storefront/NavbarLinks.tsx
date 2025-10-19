@@ -27,15 +27,15 @@ export const navbarLinks = [
   },
   {
     id: 4,
-    name: "Kids",
-    href: "/products/kids",
+    name: "Unisex",
+    href: "/products/unisex",
   },
 ];
 
 export function NavbarLinks() {
   const location = usePathname();
   return (
-    <div className="hidden md:flex justify-center items-center gap-x-2 ml-8">
+    <div className="hidden md:flex justify-center items-center gap-x-2 ml-16">
       {navbarLinks.map((item) => (
         <Link
           href={item.href}

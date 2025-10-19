@@ -2,6 +2,7 @@ import prisma from "@/app/lib/db";
 import { LoadingProductCard, ProductCard } from "./ProductCard";
 import { Suspense } from "react";
 import { unstable_noStore as noStore } from "next/cache";
+import { getAllProducts, getFeaturedProducts } from "@/app/lib/productService";
 
 async function getData() {
   const data = await prisma.product.findMany({
@@ -41,7 +42,9 @@ export function FeaturedProducts() {
 
 async function LoadFeaturedproducts() {
   noStore();
-  const data = await getData();
+
+  const token = "your_jwt_token";
+  const data = await getFeaturedProducts(token);
 
   return (
     <div className="mt-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">

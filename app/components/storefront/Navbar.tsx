@@ -15,6 +15,7 @@ import Image from "next/image";
 export async function Navbar() {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
+  //const user = "123";
 
   const cart: Cart | null = await redis.get(`cart-${user?.id}`);
 

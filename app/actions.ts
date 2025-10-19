@@ -10,6 +10,9 @@ import { Cart } from "./lib/interfaces";
 import { revalidatePath } from "next/cache";
 import { stripe } from "./lib/stripe";
 import Stripe from "stripe";
+import { getProductsById } from "./lib/productService";
+import { submitOrder } from "./lib/orderService";
+// import { useKindeAuth } from '@kinde-oss/kinde-auth-react';
 
 export async function createProduct(prevState: unknown, formData: FormData) {
   const { getUser } = getKindeServerSession();
@@ -146,8 +149,16 @@ export async function deleteBanner(formData: FormData) {
 }
 
 export async function addItem(productId: string) {
-  const { getUser } = getKindeServerSession();
+  const { getUser, getAccessToken } = getKindeServerSession();
+  // const { getToken } = useKindeAuth();
   const user = await getUser();
+  const accessToken = await getAccessToken();
+  // const accToken = await getToken();
+
+  console.log("User:", user);
+  console.log("Bearer token:", accessToken);
+  // console.log("Another Bearer Token: ", accToken)
+
 
   if (!user) {
     return redirect("/");
@@ -155,17 +166,23 @@ export async function addItem(productId: string) {
 
   let cart: Cart | null = await redis.get(`cart-${user.id}`);
 
-  const selectedProduct = await prisma.product.findUnique({
-    select: {
-      id: true,
-      name: true,
-      price: true,
-      images: true,
-    },
-    where: {
-      id: productId,
-    },
-  });
+  // const selectedProduct = await prisma.product.findUnique({
+  //   select: {
+  //     id: true,
+  //     name: true,
+  //     price: true,
+  //     images: true,
+  //   },
+  //   where: {
+  //     id: productId,
+  //   },
+  // });
+
+  // Call api product by Id 
+  const token = "your_token";
+  const selectedProduct = await getProductsById(productId, token);
+
+  console.log("Selected Product : ", selectedProduct);
 
   if (!selectedProduct) {
     throw new Error("No product with this id");
@@ -266,16 +283,34 @@ export async function checkOut() {
       line_items: lineItems,
       success_url:
         process.env.NODE_ENV === "development"
-          ? "http://localhost:3000/payment/success"
+          ? "http://localhost:3001/payment/success"
           : "https://sm-commerce-eight.vercel.app/payment/success",
       cancel_url:
         process.env.NODE_ENV === "development"
-          ? "http://localhost:3000/payment/cancel"
+          ? "http://localhost:3001/payment/cancel"
           : "https://sm-commerce-eight.vercel.app/payment/cancel",
       metadata: {
         userId: user.id,
       },
     });
+
+    //Call the api to submit order record 
+    const reqBody = {
+      userDetails: {
+        email: user.email,
+        firstName: user.given_name,
+        lastName: user.family_name,
+      },
+      items: cart.items.map((item) => ({
+        skuCode: item.name,
+        price: item.price,
+        quantity: item.quantity,
+      })),
+    };
+
+    const token = "my_jwt_token";
+
+    await submitOrder(reqBody, token);
 
     return redirect(session.url as string);
   }

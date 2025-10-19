@@ -8,8 +8,8 @@ import { ourFileRouter } from "./api/uploadthing/core";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SoleMaster - Premium and affordable sneaker",
-  description: "Discover premium sneakers and streetwear at Apa Do Je. Shop limited editions, classic kicks, and more.",
+  title: "Lattafa Perfumes - Indulge The Luxury of Fragrances",
+  description: "Lattafa Perfumes - Indulge The Luxury of Fragrances",
   keywords: [
     "sneakers",
     "streetwear",
@@ -26,13 +26,13 @@ export const metadata: Metadata = {
     icon: [
       {
         media: '(prefers-color-scheme: light)',
-        url: '/logo/newLogoSM.png',
-        href: '/logo/newLogoSM.png',
+        url: '/perfume_banner/lattafa-logo-final-2.svg',
+        href: '/perfume_banner/lattafa-logo-final-2.svg',
       },
       {
         media: '(prefers-color-scheme: dark)',
-        url: '/logo/newLogoSM.png',
-        href: '/logo/newLogoSM.png',
+        url: '/perfume_banner/lattafa-logo-final-2.svg',
+        href: '/perfume_banner/lattafa-logo-final-2.svg',
       },
     ]
   }
